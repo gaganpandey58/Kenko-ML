@@ -86,14 +86,6 @@ class NaiveBayes:
         return predictions
 
 
-def get_accuracy(test_data, predictions):
-    correct = 0
-    for x in range(len(test_data)):
-        if test_data[x][-1] == predictions[x]:
-            correct += 1
-    return (correct / float(len(test_data))) * 100
-
-
 #  read the dataset
 df = pd.read_csv("df1111.csv")
 dataset_copy = df.copy()
