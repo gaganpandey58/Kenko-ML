@@ -5,6 +5,11 @@ import pandas as pd
 import random
 import statistics
 import numpy as np
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 import math
 
@@ -105,11 +110,26 @@ df = pd.DataFrame(s, columns=df.columns)
 disease_encoder = LabelEncoder()
 symptoms_encoder = LabelEncoder()
 
+file = open("disease.txt", "w")
+symp = open("symptoms.txt", "w")
+
 X = df[['Symptom_1', 'Symptom_2', 'Symptom_3', 'Symptom_4', 'Symptom_5']]
 y = df['Disease'].values.tolist()
+for i in range(len(np.unique(y))):
+    file.write(np.unique(y)[i])
+    file.write("\n")
+
+file.close()
+
 y = disease_encoder.fit_transform(y)
+diseases_encoded = np.unique(y)
 
 symptoms = np.unique(X)
+for i in range(len(symptoms)):
+    symp.write(symptoms[i])
+    symp.write("\n")
+symp.close()
+
 symptom_ids = symptoms_encoder.fit_transform(symptoms)
 symptom_map = dict(zip(range(len(symptoms_encoder.classes_)), symptoms_encoder.classes_))
 
@@ -132,8 +152,21 @@ summaries = naiveBayes.summarize_by_class(dataset)
 prediction = naiveBayes.get_predictions(summaries, test_set)
 
 # get the accuracy
-accuracy = get_accuracy(test_set, prediction)
+y_test = pd.DataFrame(test_set)
+y_test = y_test.iloc[:, -1]
+
+# performance matrix
+accuracy = accuracy_score(y_test, prediction)
+f1_score = f1_score(y_test, prediction, average='weighted')
+recall_score = recall_score(y_test, prediction, average='weighted')
+precision_score = precision_score(y_test, prediction, average='weighted')
+confusion_matrix = confusion_matrix(y_test, prediction)
+
 print("Accuracy :- {0}%".format(accuracy))
+print("F1 Score :- {0}".format(f1_score))
+print("Recall Score :- {0}".format(recall_score))
+print("Precision Score :- {0}".format(precision_score))
+print("Confusion Matrix :- \n", confusion_matrix)
 
 app = FastAPI()
 
