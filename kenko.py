@@ -179,8 +179,8 @@ def get_symptoms():
     """
     Returns all the unique symptoms.
     """
-    unique_symptoms = np.unique(dataset_copy.iloc[:, 1:])
-
+    # symptoms_list = list(symptom_map.values())
+    # return list(symptoms_list)
     return symptom_map
 
 
