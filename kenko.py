@@ -1,3 +1,5 @@
+import json
+
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -179,9 +181,19 @@ def get_symptoms():
     """
     Returns all the unique symptoms.
     """
-    # symptoms_list = list(symptom_map.values())
+    symptoms_list = list(symptom_map.values())
+
+    symptomsJson = []
+
+    for symptom in symptoms_list:
+        symptomDict = dict()
+        symptomDict['name'] = symptom
+        symptomDict['id'] = symptoms_list.index(symptom)
+        symptomsJson.append(symptomDict)
+
+    return symptomsJson
     # return list(symptoms_list)
-    return symptom_map
+    # return symptom_map
 
 
 @app.post("/api/v1/predict")
