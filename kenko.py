@@ -100,29 +100,31 @@ s = pd.Series(data)
 s = s.str.strip()
 s = s.values.reshape(df.shape)
 
+np.savetxt("revisedDataset.csv", s, delimiter=",")
+
 df = pd.DataFrame(s, columns=df.columns)
 disease_encoder = LabelEncoder()
 symptoms_encoder = LabelEncoder()
 
-file = open("disease.txt", "w")
-symp = open("symptoms.txt", "w")
+# file = open("disease.txt", "w")
+# symp = open("symptoms.txt", "w")
 
 X = df[['Symptom_1', 'Symptom_2', 'Symptom_3', 'Symptom_4', 'Symptom_5']]
 y = df['Disease'].values.tolist()
-for i in range(len(np.unique(y))):
-    file.write(np.unique(y)[i])
-    file.write("\n")
+# for i in range(len(np.unique(y))):
+#     file.write(np.unique(y)[i])
+#     file.write("\n")
 
-file.close()
+# file.close()
 
 y = disease_encoder.fit_transform(y)
 diseases_encoded = np.unique(y)
 
 symptoms = np.unique(X)
-for i in range(len(symptoms)):
-    symp.write(symptoms[i])
-    symp.write("\n")
-symp.close()
+# for i in range(len(symptoms)):
+#     symp.write(symptoms[i])
+#     symp.write("\n")
+# symp.close()
 
 symptom_ids = symptoms_encoder.fit_transform(symptoms)
 symptom_map = dict(zip(range(len(symptoms_encoder.classes_)), symptoms_encoder.classes_))
