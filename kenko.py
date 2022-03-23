@@ -179,7 +179,7 @@ class Request_body(BaseModel):
 @app.get("/api/v1/symptoms")
 def get_symptoms():
     """
-    Returns all the unique symptoms.
+    Returns all the unique symptoms to JSON format
     """
     symptoms_list = list(symptom_map.values())
 
@@ -192,8 +192,23 @@ def get_symptoms():
         symptomsJson.append(symptomDict)
 
     return symptomsJson
-    # return list(symptoms_list)
-    # return symptom_map
+
+
+@app.get("/api/v1/data")
+def get_data():
+    dataJson = []
+    dataArray = dataset_copy.values.tolist()
+    for row in dataArray:
+        dataDict = dict()
+        dataDict["Disease"] = row[0]
+        dataDict["Symptoms1"] = row[1]
+        dataDict["Symptoms2"] = row[2]
+        dataDict["Symptoms3"] = row[3]
+        dataDict["Symptoms4"] = row[4]
+        dataDict["Symptoms5"] = row[5]
+
+        dataJson.append(dataDict)
+    return dataJson
 
 
 @app.post("/api/v1/predict")
