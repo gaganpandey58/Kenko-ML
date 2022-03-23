@@ -89,7 +89,7 @@ class NaiveBayes:
 
 
 #  read the dataset
-df = pd.read_csv("df1111.csv")
+df = pd.read_csv("revisedDataset.csv")
 dataset_copy = df.copy()
 df = df[df.Disease != 'Typhoid']
 
@@ -100,9 +100,9 @@ s = pd.Series(data)
 s = s.str.strip()
 s = s.values.reshape(df.shape)
 
-np.savetxt("revisedDataset.csv", s, delimiter=",")
-
 df = pd.DataFrame(s, columns=df.columns)
+# df.to_csv('revisedDataset.csv', index=False)
+
 disease_encoder = LabelEncoder()
 symptoms_encoder = LabelEncoder()
 
