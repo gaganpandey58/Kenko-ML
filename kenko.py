@@ -1,4 +1,5 @@
 import json
+import os
 
 import uvicorn
 from fastapi import FastAPI
@@ -14,6 +15,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 import math
+import csv
+import my_module
+from importlib import reload
 
 
 class NaiveBayes:
@@ -89,9 +93,9 @@ class NaiveBayes:
 
 
 #  read the dataset
-df = pd.read_csv("revisedDataset.csv")
-dataset_copy = df.copy()
-df = df[df.Disease != 'Typhoid']
+original_data = pd.read_csv("revisedDataset.csv")
+dataset_copy = original_data.copy()
+df = original_data[original_data.Disease != 'Typhoid']
 
 cols = df.columns
 data = df[cols].values.flatten()
@@ -178,6 +182,15 @@ class Request_body(BaseModel):
     symptom5: str
 
 
+class Disease_request(BaseModel):
+    disease: str
+    symptom1: str
+    symptom2: str
+    symptom3: str
+    symptom4: str
+    symptom5: str
+
+
 @app.get("/api/v1/symptoms")
 def get_symptoms():
     """
@@ -211,6 +224,15 @@ def get_data():
 
         dataJson.append(dataDict)
     return dataJson
+
+
+@app.post("/api/v1/disease")
+def add_disease(disease: Disease_request):
+    user_input = [disease.disease, disease.symptom1, disease.symptom2,
+                  disease.symptom3, disease.symptom4, disease.symptom5]
+    with open('revisedDataset.csv', 'a') as file:
+        writer = csv.writer(file)
+        writer.writerow(user_input)
 
 
 @app.post("/api/v1/predict")
