@@ -19,6 +19,8 @@ import csv
 import my_module
 from importlib import reload
 
+from starlette.middleware.cors import CORSMiddleware
+
 
 class NaiveBayes:
     # split the dataset into test set and train set
@@ -169,6 +171,13 @@ print("Precision Score :- {0}".format(precision_score))
 print("Confusion Matrix :- \n", confusion_matrix)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 class Request_body(BaseModel):
